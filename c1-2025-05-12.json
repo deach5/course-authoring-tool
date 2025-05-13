@@ -1,0 +1,62 @@
+{
+  "course_id": "b147e9de-b50e-4b75-a427-7953f0785717",
+  "title": "c1",
+  "metadata": {
+    "description": "",
+    "author": "",
+    "version": "",
+    "language": ""
+  },
+  "topics": [
+    {
+      "id": "b1b7d37f-13a2-4724-b010-5126f699cb77",
+      "title": "Intro",
+      "pages": [
+        {
+          "id": "16219176-f9cf-4a92-9bc2-b1873a009b65",
+          "title": "Menu",
+          "page_type": "menu",
+          "menu_links_to_topic_ids": []
+        }
+      ]
+    },
+    {
+      "id": "56848c24-fce9-4068-9fcc-2ce4efd47069",
+      "title": "Topic 2",
+      "pages": [
+        {
+          "id": "46c54aab-ada3-4fed-a392-ff918671e686",
+          "title": "Page 1",
+          "page_type": "static"
+        },
+        {
+          "id": "2d6d5c81-bb4c-40f1-a6e9-26d7882881ec",
+          "title": "Page 2",
+          "page_type": "question_multichoice"
+        }
+      ]
+    },
+    {
+      "id": "b215635b-cb87-4b4a-9085-711411185f58",
+      "title": "Topic 3",
+      "pages": [
+        {
+          "id": "3ad80ead-2e05-4fc0-8584-ee9051bd8418",
+          "title": "111",
+          "page_type": "static"
+        },
+        {
+          "id": "fe2cd811-c535-4f23-9fb3-d7bdd8a159ea",
+          "title": "222",
+          "page_type": "static"
+        },
+        {
+          "id": "9e60d7d7-e521-4612-8837-556c8bd7cf92",
+          "title": "333",
+          "page_type": "question_multichoice"
+        }
+      ]
+    }
+  ],
+  "last_saved_timestamp": "2025-05-12T06:34:51.894Z"
+}

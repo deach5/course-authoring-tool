@@ -218,25 +218,18 @@ export const useCourseStore = defineStore('course', {
         page_type: pageType
       }
 
-      // Add menu_links_to_topic_ids array for menu type pages
+      // Initialize content structure for menu pages
       if (pageType === 'menu') {
-        newPage.menu_links_to_topic_ids = []
+        newPage.content = {
+          heading: '',
+          initialText: '',
+          menuItems: []
+        }
       }
 
       topic.pages.push(newPage)
       this.updateLastSaved()
       return newPage.id
-    },
-
-    setMenuLinks({ topicId, pageId, targetTopicIds }) {
-      const topic = this.topicById(topicId)
-      if (!topic) return
-
-      const page = topic.pages.find(p => p.id === pageId)
-      if (!page || page.page_type !== 'menu') return
-
-      page.menu_links_to_topic_ids = [...targetTopicIds]
-      this.updateLastSaved()
     },
 
     removeTopic(topicId) {
