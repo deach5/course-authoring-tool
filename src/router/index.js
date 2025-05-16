@@ -43,6 +43,12 @@ const routes = [
         props: true
       },
       {
+        path: 'topic/:topicId/page/:pageId',
+        name: 'PageEditor',
+        component: () => import('../views/PageEditor.vue'),
+        props: true
+      },
+      {
         path: 'settings',
         name: 'CourseSettings',
         component: () => import('../views/CourseSetup.vue'),

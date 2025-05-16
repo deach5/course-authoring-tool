@@ -215,17 +215,31 @@ export const useCourseStore = defineStore('course', {
       const newPage = {
         id: uuidv4(),
         title: pageTitle,
-        page_type: pageType
-      }
-
-      // Initialize content structure for menu pages
-      if (pageType === 'menu') {
-        newPage.content = {
+        page_type: pageType,
+        content: { // Initialize content for all pages
           heading: '',
-          initialText: '',
-          menuItems: []
+          initialText: ''
         }
       }
+
+      // Initialize type-specific content structures
+      if (pageType === 'menu') {
+        newPage.content.menuItems = [];
+      } else if (pageType === 'accordion' || pageType === 'carousel' || pageType === 'clickreveal') {
+        newPage.content.items = [];
+      } else if (pageType === 'question_multichoice') {
+        // newPage.content is already initialized with heading and initialText
+        newPage.content.questionText = ''; 
+        newPage.content.options = [
+          { id: uuidv4(), text: '', isCorrect: false },
+          { id: uuidv4(), text: '', isCorrect: false }
+        ];
+        newPage.content.correctFeedback = '';
+        newPage.content.incorrectFeedback = '';
+        newPage.content.enableTryAgain = false;
+        newPage.content.tryAgainAttempts = 0; 
+      }
+      // Static pages use the default heading and initialText in content
 
       topic.pages.push(newPage)
       this.updateLastSaved()
@@ -254,6 +268,39 @@ export const useCourseStore = defineStore('course', {
         return true
       }
       return false
+    },
+
+    updatePageContent(pageId, updatedContent, disableNext) {
+      if (!this.currentCourse) return false;
+
+      let pageFound = false;
+      for (const topic of this.currentCourse.topics) {
+        const page = topic.pages.find(p => p.id === pageId);
+        if (page) {
+          // Ensure content object exists
+          if (!page.content) {
+            page.content = {};
+          }
+          // Merge updatedContent into page.content
+          page.content = { ...page.content, ...updatedContent };
+
+          // Update disable_next if provided
+          if (disableNext !== undefined) {
+            page.disable_next = disableNext;
+          }
+
+          pageFound = true;
+          break; // Exit loop once page is found and updated
+        }
+      }
+
+      if (pageFound) {
+        this.updateLastSaved();
+        return true;
+      } else {
+        console.warn(`updatePageContent: Page with ID ${pageId} not found.`);
+        return false;
+      }
     },
 
     updateLastSaved() {

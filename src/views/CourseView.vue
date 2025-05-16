@@ -37,6 +37,10 @@ const loadCourse = async () => {
 
 // Watch for courseId changes
 watch(() => props.courseId, loadCourse, { immediate: true })
+
+const generateCourse = async () => {
+  console.log('Generating course...');
+};
 </script>
 
 <template>
@@ -52,6 +56,7 @@ watch(() => props.courseId, loadCourse, { immediate: true })
         </span>
       </div>
       <CourseImportExport class="import-export" />
+      <button class="generate-button" @click="generateCourse">Generate Course</button>
     </header>
 
     <nav class="course-nav">
@@ -160,6 +165,22 @@ watch(() => props.courseId, loadCourse, { immediate: true })
   flex: 1;
   padding: 20px;
   background: #f5f5f5;
+}
+
+.generate-button {
+  background-color: #673ab7; /* Purple */
+  color: white;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  margin-left: 10px;
+  transition: background-color 0.2s;
+}
+
+.generate-button:hover {
+  background-color: #5e35b1;
 }
 
 @media (max-width: 600px) {

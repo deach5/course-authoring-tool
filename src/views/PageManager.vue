@@ -1,8 +1,13 @@
 <script setup>
 import { ref, computed } from 'vue'
 import { useCourseStore } from '../stores/courseStore'
+import { useRouter } from 'vue-router'
 
 const props = defineProps({
+  courseId: {
+    type: String,
+    required: true
+  },
   topicId: {
     type: String,
     required: true
@@ -10,6 +15,7 @@ const props = defineProps({
 })
 
 const courseStore = useCourseStore()
+const router = useRouter()
 const newPageTitle = ref('')
 const newPageType = ref('static')
 
@@ -19,11 +25,7 @@ const currentTopic = computed(() =>
 
 const pages = computed(() => currentTopic.value?.pages || [])
 
-const availablePageTypes = ref(['static', 'menu', 'question_multichoice'])
-
-const otherTopics = computed(() => 
-  courseStore.currentCourse?.topics.filter(t => t.id !== props.topicId) || []
-)
+const availablePageTypes = ref(['static', 'menu', 'accordion', 'carousel', 'clickreveal', 'question_multichoice'])
 
 const addPage = () => {
   if (newPageTitle.value.trim()) {
@@ -46,21 +48,15 @@ const deletePage = (pageId, pageTitle) => {
   }
 }
 
-const updateMenuLinks = (page, topicId, isChecked) => {
-  const currentLinks = page.menu_links_to_topic_ids || []
-  let newLinks = [...currentLinks]
-
-  if (isChecked && !currentLinks.includes(topicId)) {
-    newLinks.push(topicId)
-  } else if (!isChecked) {
-    newLinks = newLinks.filter(id => id !== topicId)
-  }
-
-  courseStore.setMenuLinks({
-    topicId: props.topicId,
-    pageId: page.id,
-    targetTopicIds: newLinks
-  })
+const handleEditPage = (pageId) => {
+  router.push({
+    name: 'PageEditor',
+    params: {
+      courseId: props.courseId,
+      topicId: props.topicId,
+      pageId: pageId
+    }
+  });
 }
 </script>
 
@@ -118,30 +114,19 @@ const updateMenuLinks = (page, topicId, isChecked) => {
             <h4>{{ page.title }}</h4>
             <span class="page-type">{{ page.page_type }}</span>
           </div>
-          <button 
-            @click="deletePage(page.id, page.title)"
-            class="delete-button"
-          >
-            Delete Page
-          </button>
-        </div>
-
-        <!-- Menu Links Configuration -->
-        <div v-if="page.page_type === 'menu'" class="menu-links">
-          <h5>Links to topics:</h5>
-          <div class="topic-checkboxes">
-            <label 
-              v-for="topic in otherTopics" 
-              :key="topic.id"
-              class="checkbox-label"
+          <div class="page-actions">
+            <button 
+              @click="handleEditPage(page.id)"
+              class="edit-button"
             >
-              <input
-                type="checkbox"
-                :checked="page.menu_links_to_topic_ids?.includes(topic.id)"
-                @change="updateMenuLinks(page, topic.id, $event.target.checked)"
-              >
-              {{ topic.title }}
-            </label>
+              Edit Page
+            </button>
+            <button 
+              @click="deletePage(page.id, page.title)"
+              class="delete-button"
+            >
+              Delete Page
+            </button>
           </div>
         </div>
       </li>
@@ -248,55 +233,44 @@ input, select {
   color: #666;
   background: #e0e0e0;
   padding: 2px 8px;
-  border-radius: 12px;
-}
-
-.delete-button {
-  padding: 6px 12px;
-  background-color: #f44336;
-  color: white;
-  border: none;
   border-radius: 4px;
-  cursor: pointer;
 }
 
-.delete-button:hover {
-  background-color: #d32f2f;
-}
-
-.menu-links {
-  margin-top: 15px;
-  padding-top: 15px;
-  border-top: 1px solid #ddd;
-}
-
-.menu-links h5 {
-  margin: 0 0 10px 0;
-  color: #2c3e50;
-}
-
-.topic-checkboxes {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+.page-actions {
+  display: flex;
   gap: 10px;
 }
 
-.checkbox-label {
-  display: flex;
-  align-items: center;
-  gap: 8px;
+.edit-button,
+.delete-button {
+  padding: 6px 12px;
+  border: none;
+  border-radius: 4px;
   cursor: pointer;
+  font-size: 13px;
 }
 
-.checkbox-label input {
-  cursor: pointer;
+.edit-button {
+  background-color: #2196F3;
+  color: white;
+}
+
+.edit-button:hover {
+  background-color: #1e88e5;
+}
+
+.delete-button {
+  background-color: #f44336;
+  color: white;
+}
+
+.delete-button:hover {
+  background-color: #e53935;
 }
 
 .no-pages, .no-topic {
   text-align: center;
-  color: #666;
-  padding: 30px;
-  background: #f5f5f5;
-  border-radius: 8px;
+  color: #757575;
+  padding: 20px;
 }
 </style> 
