@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="{{ lang }}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ courseTitle }} - {{ pageTitle }}</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <!-- Add any other common head elements here -->
+    <!-- For browser compatibility or specific libraries if needed -->
+</head>
+<body>
+    <div id="course-player">
+        <header>
+            <!-- You can include common header elements here -->
+            <!-- Displaying Course/Topic titles might happen here or in the page content -->
+            <h1>{{ courseTitle }}</h1>
+            <h2>{{ topicTitle }}</h2>
+        </header>
+
+        <main id="page-content">
+            <!-- PAGE SPECIFIC CONTENT WILL BE INJECTED HERE -->
+            <!-- This is where generatePageHtml's output will go -->
+            <!-- Use specific placeholders that your generator will replace -->
+            <div id="page-specific-content-placeholder"></div>
+        </main>
+
+        <footer>
+             <!-- Common footer elements like navigation buttons -->
+             <button class="nav-back">Back</button>
+             <button class="nav-next">Next</button>
+        </footer>
+    </div>
+
+    <script src="../js/script.js"></script>
+    <!-- You might need specific scripts per page type later -->
+    <!-- <script src="../js/page-type-script.js"></script> -->
+</body>
+</html> 

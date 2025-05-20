@@ -1,8 +1,9 @@
 <script setup>
-import { computed, watch } from 'vue'
+import { computed, watch, ref } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useCourseStore } from '../stores/courseStore'
 import CourseImportExport from '../components/CourseImportExport.vue'
+import { generateCourse as generateCourseZip } from '../utils/courseGenerator'
 
 const props = defineProps({
   courseId: {
@@ -38,8 +39,20 @@ const loadCourse = async () => {
 // Watch for courseId changes
 watch(() => props.courseId, loadCourse, { immediate: true })
 
+const isGenerating = ref(false)
+
 const generateCourse = async () => {
-  console.log('Generating course...');
+  isGenerating.value = true
+  try {
+    courseStore.updateLastSaved()
+    await generateCourseZip(courseStore.getCourseForExport)
+    alert('Course generated successfully!')
+  } catch (error) {
+    console.error('Error during course generation:', error)
+    alert('Course generation failed. See console for details.')
+  } finally {
+    isGenerating.value = false
+  }
 };
 </script>
 
@@ -56,7 +69,9 @@ const generateCourse = async () => {
         </span>
       </div>
       <CourseImportExport class="import-export" />
-      <button class="generate-button" @click="generateCourse">Generate Course</button>
+      <button class="generate-button" @click="generateCourse" :disabled="isGenerating">
+        {{ isGenerating ? 'Generating...' : 'Generate Course' }}
+      </button>
     </header>
 
     <nav class="course-nav">
